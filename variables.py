@@ -3,6 +3,7 @@
 
 from abc import ABCMeta
 from numbers import Real
+import functools
 
 
 #Decorator class for setter methods independent of @property. Setter methods
@@ -43,3 +44,8 @@ class WithBoundedAttr(metaclass = ABCMeta):
         self.bounds[name] = mini, maxi
         if hasattr(self, name):
             setattr(self, name, getattr(self, name))
+
+
+# A property that caches the result to avoid querying the api more than needed.
+def lazy_property(func):
+    return property(functools.lru_cache()(func))
